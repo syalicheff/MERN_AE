@@ -10,7 +10,7 @@ export default function Datatable({rows=[]}){
     const [query, setQuery] = useState('')
 
     const [transf, setTransf] = useState([])
-
+    const [count, setCount] = useState(9)
     
     function sort(rows) {
         return rows.sort((a,b) => {
@@ -27,24 +27,27 @@ export default function Datatable({rows=[]}){
             )
         )
     }
+    
     function appendTable(e , col) {
-        // const inArray 
         rows.forEach(element =>{
             if (element[col] == e.target.innerText){ 
                 setTransf(prev => {
-                   return !transf.some((t) =>{
-                       console.log('element : ' + element['_id'] +'transfo : ' + t['_id'])
-                       t['_id'] === element['id']
+                   return transf.some((t) =>{
+                        return t[col] == e.target.innerText
                     }) 
-                    && [...prev, element]
+                    ? //remove the element
+                    prev.filter((t) =>{
+                        return t[col] != e.target.innerText
+                    })
+                    : [...prev, element]
                 })
                 console.log(transf)
-
             }  
         })
     }
+
     return (
-    <div className="flex flex-col gap-2 w-full overflow-y-auto h-96">
+    <div className="flex flex-col gap-2 w-full overflow-y-auto ">
         <input 
             className="border border-gray-400 text-gray-800 placeholder:text-gray-800 w-full p-2"
             type="text"
@@ -76,21 +79,49 @@ export default function Datatable({rows=[]}){
         </thead>
         <tbody>
             {sort(filter(rows))
-            // .slice(0,15)
+            .slice(0,count)
             .map((row =>
-            <tr>
+            <tr key={row['_id']}>
                 {columns.map((column) =>(
-                    <td 
-                    onClick={e => appendTable(e, column) } 
+                    <td
+                    onClick={
+                        (e) => {
+                            // e.target.parentElement.classList.add("bg-gray-300")
+                            appendTable(e, column)
+                        }
+                    } 
                     className="border-b border-gray-200 bg-gray100 even:bg-gray-50 p-1">
                         {row[column]}
-                    
                     </td>
                 ))}
             </tr> 
             ))}
         </tbody>
         </table>
+        <div className="w-full text-center">
+            <button onClick={() => setCount(prev => prev + 5)} >more</button>
+        </div>
+
+
+        <table className="border border-gray-600 w-full ">
+        <thead>
+            <tr>
+                <th className="bg-gray-300 p-2 border-b border-gray-400 text-left">name</th>
+                <th className="bg-gray-300 p-2 border-b border-gray-400 text-left">email</th>
+                <th className="bg-gray-300 p-2 border-b border-gray-400 text-left">company</th>
+            </tr>
+        </thead>
+        <tbody>
+            {transf.map((row =>
+            <tr>
+                <td className="border-b border-gray-200 bg-gray100 even:bg-gray-50 p-1">{row.name}</td>
+                <td className="border-b border-gray-200 bg-gray100 even:bg-gray-50 p-1">{row.email}</td>
+                <td className="border-b border-gray-200 bg-gray100 even:bg-gray-50 p-1">{row.company}</td>
+            </tr>
+            ))}
+        </tbody>
+        </table>
     </div>
     )
 }
+
