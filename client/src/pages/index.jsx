@@ -9,8 +9,13 @@ export default function Homepage() {
 
   const [transf, setTransf] = useState([])
 
+    people = people.map(person => {
+    return {
+      ...person,
+      qte: 1
+    }
+  })
 
-  // add a key to each person named selector  with 1 as value and 
   return (
     <div>
       <Navbar />

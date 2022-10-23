@@ -5,7 +5,7 @@ export default function Buttons({setTransf}) {
     }
 
     return (
-        // red buttons with texts(Trasnsformer, Reset qte, Actualiser, Select all, Deselect all)) with margin 2
+        // red buttons with texts(Trasnsformer, Reset qte, Actualiser, Select all, Deselect all) with margin 2
         <div className="flex flex-col gap-2 m-1.5">
             <button className="bg-red-500 text-white p-2 rounded-md">Transformer</button>
             <button className="bg-red-500 text-white p-2 rounded-md">Reset qte</button>
