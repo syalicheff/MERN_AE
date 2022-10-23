@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/solid"
 
-export default function Datatable({rows=[]}){
+export default function Datatable({rows=[], transf = [] , setTransf}) {
     const columns = Object.keys(rows[0])
     const [sortedBy, setSortedBy] = useState({
         column: columns[0],
@@ -9,25 +9,8 @@ export default function Datatable({rows=[]}){
     })
     const [query, setQuery] = useState('')
 
-    const [transf, setTransf] = useState([])
     const [count, setCount] = useState(9)
-    
-    function sort(rows) {
-        return rows.sort((a,b) => {
-            const {column,asc} = sortedBy
-            if(a[column].toString() > b[column].toString()) return asc ? -1 : 1
-            if(b[column].toString() > a[column].toString()) return asc ? 1 : -1
-            return 0
-        });
-    }
-    function filter(rows){
-        return rows.filter(row => 
-            columns.some(column =>
-             row[column].toLowerCase().indexOf(query.toLowerCase()) > -1
-            )
-        )
-    }
-    
+
     function appendTable(e , col) {
         rows.forEach(element =>{
             if (element[col] == e.target.innerText){ 
@@ -45,6 +28,21 @@ export default function Datatable({rows=[]}){
             }  
         })
     }
+    function sort(rows) {
+        return rows.sort((a,b) => {
+            const {column,asc} = sortedBy
+            if(a[column].toString() > b[column].toString()) return asc ? -1 : 1
+            if(b[column].toString() > a[column].toString()) return asc ? 1 : -1
+            return 0
+        });
+    }
+    function filter(rows){
+        return rows.filter(row => 
+            columns.some(column =>
+             row[column].toLowerCase().indexOf(query.toLowerCase()) > -1
+            )
+        )
+    }  
 
     return (
     <div className="flex flex-col gap-2 w-full overflow-y-auto ">
@@ -86,7 +84,6 @@ export default function Datatable({rows=[]}){
                     <td
                     onClick={
                         (e) => {
-                            // e.target.parentElement.classList.add("bg-gray-300")
                             appendTable(e, column)
                         }
                     } 
